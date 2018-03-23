@@ -1,0 +1,5 @@
+name: ConfigUtility
+main: net.pandorramc.config.Main
+version: 1.0
+author: Shadow_Lurker
+description: Manages Configuration Files Async
