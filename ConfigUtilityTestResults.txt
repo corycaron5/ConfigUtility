@@ -24,7 +24,7 @@
 [19:36:29 INFO]: 0.001 seconds that main thread was locked to read all entries from test6 = Read all entries from converted Map<String, String> object with 10000 entries and place them into a Map<String, Integer>
 
 
-Notes: All time values are measured by using System.currentTimeMillis() and are limited to Linux system time. Tests were conducted on a dedicated server with an 8Core CPU and 1GB of RAM. 
+Notes: All time values are measured by using System.currentTimeMillis() and are limited to Linux system time. Tests were conducted on a dedicated server with an 8Core CPU and 32GB of RAM. (1GB on test server)
 Tests vary each time and will be vastly different depending on the server hardware and software installed.
  
 Understanding the results: 
