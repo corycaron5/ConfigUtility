@@ -1,0 +1,6 @@
+name: ConfigUtilityTest
+main: net.pandorramc.tester.Main
+version: 1.0
+depend: [ConfigUtility]
+author: Shadow_Lurker
+description: Manages Configuration Files Async
