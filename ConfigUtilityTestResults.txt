@@ -1,0 +1,54 @@
+[18:28:57 INFO]: 1.248 seconds that main thread was locked for test1 = Standard config writing for 100000 entries
+[18:28:58 INFO]: 0.419 seconds that main thread was locked for test2 = Async config writing with a FileConfiguration object created sync for 100000 entries
+[18:28:58 INFO]: 0.032 seconds that main thread was locked for test3 = Totally Async config creation for 100000 entries
+[18:28:58 INFO]: 0.094 seconds that main thread was locked for test4 = Standard config writing for 10000 entries
+[18:28:58 INFO]: 0.036 seconds that main thread was locked for test5 = Async config writing with a FileConfiguration object created sync for 10000 entries
+[18:28:58 INFO]: 0.001 seconds that main thread was locked for test6 = Totally Async config creation for 10000 entries
+
+[19:07:48 INFO]: 0.628 seconds that main thread was locked for test1 = Standard config loading from file for 100000 entries
+[19:07:48 INFO]: 0.088 seconds that main thread was locked for test4 = Standard config loading from file for 10000 entries
+[19:07:48 INFO]: 0.599 seconds that main thread was locked for test3 = Converting a config file to Map<String, String> for 100000 entries
+[19:07:48 INFO]: 0.041 seconds that main thread was locked for test6 = Converting a config file to Map<String, String> for 10000 entries
+[19:07:54 INFO]: 0.001 seconds that main thread was locked for test2 = Async loading config file to memory for 100000 entries
+[19:07:54 INFO]: 0.0 seconds that main thread was locked for test5 = Async loading config file to memory for 10000 entries
+[19:07:55 INFO]: test1 is not null: true = Confirming that FileConfiguration object is not null
+[19:07:55 INFO]: test2 is not null: true = Confirming that FileConfiguration object is not null
+[19:07:55 INFO]: test3 is not null: true = Confirming that Map<String, String> object is not null
+[19:07:55 INFO]: test4 is not null: true = Confirming that FileConfiguration object is not null
+[19:07:55 INFO]: test5 is not null: true = Confirming that FileConfiguration object is not null
+[19:07:55 INFO]: test6 is not null: true = Confirming that Map<String, String> object is not null
+
+[19:36:29 INFO]: 0.068 seconds that main thread was locked to read all entries from test1 = Read all entries from standard FileConfiguration object with 100000 entries and place them into a Map<String, Integer>
+[19:36:29 INFO]: 0.019 seconds that main thread was locked to read all entries from test3 = Read all entries from converted Map<String, String> object with 100000 entries and place them into a Map<String, Integer>
+[19:36:29 INFO]: 0.002 seconds that main thread was locked to read all entries from test4 = Read all entries from standard FileConfiguration object with 10000 entries and place them into a Map<String, Integer>
+[19:36:29 INFO]: 0.001 seconds that main thread was locked to read all entries from test6 = Read all entries from converted Map<String, String> object with 10000 entries and place them into a Map<String, Integer>
+
+
+Notes: All time values are measured by using System.currentTimeMillis() and are limited to Linux system time. Tests were conducted on a dedicated server with an 8Core CPU and 1GB of RAM. 
+Tests vary each time and will be vastly different depending on the server hardware and software installed.
+ 
+Understanding the results: 
+These results were mostly all expected, with the exception of test3 and test6 when loading the data from file. I thought that it would take longer to load to a Map
+
+Writing to file:
+Test 1 blocked the main thread the longest to create a FileConfiguration and write it to disk normally
+Test 2 blocked the main thread for less time to create a FileConfiguration object sync and then write it to disk Async
+Test 3 blocked the main thread for the least amount of time to create the FileConfiguration object and write it to disk Async
+Test 4 was the same as test1 with a smaller amount of entries
+Test 5 was the same as test2 with a smaller amount of entries
+Test 6 was the same as test3 with a smaller amount of entries
+
+Reading from file:
+Test 1 blocked the main thread for the longest to load and create a FileConfiguration object from disk
+Test 4 was the same as test1 with a smaller amount of entries
+Test 3 blocked the main thread for slightly less than test1 to load the contents of the config file into a Map<String, String> instead of saving a reference of the FileConfiguration object
+Test 6 was the same as test3 with a smaller amount of entries
+Test 2 effectively did not block the main thread at all to load 100000 entries from a config file, however, for safety we only accessed the file 5 seconds later to ensure that it was fully loaded
+Test 5 was the same as test2, but again we saved a reference of the FileConfiguration object 5 seconds later to ensure it was fully loaded
+It may be noted that you can load the contents of the config file to a Map Async to improve load time, 
+however this test was omitted because it would produce no additional information of use that cannot be obtained from the already completed tests
+
+Loading information from FileConfiguration object vs loading from Map<String, String>:
+It took much longer to access the information from a FileConfiguration object than from a Map object with the same information, 
+however the FileConfiguration object allows us to use various built in methods for accessing the information which can be much easier than parsing each value
+There is also a built in method that allows for conversion to Map<String, Object> instead of Map<String, String>, however it is not tested thoroughly so may cause unknown behavior 
