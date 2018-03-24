@@ -112,4 +112,8 @@ public class SerializerUtil {
 	public static <T> T deserialize(final byte[] objectData) {
 		return deserialize(new ByteArrayInputStream(objectData));
 	}
+	
+	public static <T> T deserializeObject(final String data){
+		return deserialize(deserializeByteArray(data));
+	}
 }

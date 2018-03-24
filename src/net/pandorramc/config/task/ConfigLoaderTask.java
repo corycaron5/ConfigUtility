@@ -15,7 +15,7 @@ public class ConfigLoaderTask implements Runnable{
 	private final JavaPlugin plugin;
 	private final byte configType;
 	
-	public ConfigLoaderTask createConfigLoaderTask(String name, JavaPlugin plugin, String subdirectory, URI directory){
+	public static ConfigLoaderTask createConfigLoaderTask(final String name, final JavaPlugin plugin, final String subdirectory, final URI directory){
 		return new ConfigLoaderTask(name, directory, subdirectory, plugin);
 	}
 	
